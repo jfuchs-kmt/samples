@@ -3,7 +3,7 @@
 Minimal example for an interface connecting Fortran OpenMP code with CUDA in C.
 Verified to compile with latest `LLVM`, `NVHPC 25.9` and `CUDA 13.0`.
 
-Requires correctly setup compiler environment. Compile with:
+Requires correctly setup compiler and CUDA environment. Compile with:
 ```
 mkdir build && cd build
 cmake .. && cmake --build .
