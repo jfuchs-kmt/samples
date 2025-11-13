@@ -58,11 +58,23 @@ int main() {
 
     int num_interop_properties = omp_get_num_interop_properties(iobj);
 
-    printf("========== (Optional) Interop properties ============\n");
+    printf("================ Interop properties =================\n");
     printf("Num. properties available to interop handle: %i\n", num_interop_properties);
-    printf("=====================================================\n");
     // If there are any properties, query them with
-    // omp_get_interop_name, omp_get_interop_type_desc, omp_get_interop_rc_desc
+    for (int i = 0; i < num_interop_properties; ++i) {
+        omp_interop_property_t property_id = static_cast<omp_interop_property_t>(i);
+
+        const char* property_name = omp_get_interop_name(iobj, property_id);
+        const char* property_type_desc = omp_get_interop_type_desc(iobj, property_id);
+        // Assume all properties are integers
+        // The only vendor that I saw that has this implemented is Intel, where all properties are integers
+        int retcode;
+        omp_intptr_t intptr = omp_get_interop_int(iobj, property_id, &retcode);
+        const char* property_rc_desc = omp_get_interop_rc_desc(iobj, static_cast<omp_interop_rc_t>(retcode));
+
+        printf("  %*s: %li (%s) -> %s\n", 30, property_name, static_cast<long>(intptr), property_type_desc, property_rc_desc);
+    }
+    printf("=====================================================\n");
 
 #ifdef _WITH_CUDA_
     CUcontext cu_ctx = static_cast<CUcontext>(h_device_context);
