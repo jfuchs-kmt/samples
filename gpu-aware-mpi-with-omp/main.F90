@@ -17,9 +17,9 @@ PROGRAM main
 
     !$omp target update from(recvbuf)
     IF (myid == 0) THEN
-        PRINT*, "recvbuf (myid=0):"
+        PRINT*, "recvbuf (rank=0):"
         PRINT*, recvbuf
-        PRINT*, "sendbuf (myid=0):"
+        PRINT*, "sendbuf (rank=0):"
         PRINT*, sendbuf
     ENDIF
 
@@ -30,10 +30,9 @@ CONTAINS
 
         ALLOCATE(sendbuf(N), source=REAL(myid))
         ALLOCATE(recvbuf(N), source=0.0)
-        !$omp target enter data map(alloc: sendbuf, recvbuf)
-        !$omp target update to(sendbuf, recvbuf)
+        !$omp target enter data map(to: sendbuf, recvbuf)
 
-        ! Fill receive buffer with some initial value to check overrides in the end
+        ! Fill receive buffer on target with some initial value to check overrides in the end
         !$omp target teams loop
         DO i = 1, N
             recvbuf(i) = -1.0

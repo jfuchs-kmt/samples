@@ -20,6 +20,8 @@ elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "LLVMFlang")
     set(_OMP_OFFLOAD_FLAGS -fopenmp -fopenmp-version=52 -fopenmp-targets=nvptx64-nvidia-cuda)
 elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "NVHPC")
     set(_OMP_OFFLOAD_FLAGS -mp=gpu)
+elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "IntelLLVM")
+    set(_OMP_OFFLOAD_FLAGS -fiopenmp -fopenmp-targets=spir64)
 endif()
 
 add_compile_options(
